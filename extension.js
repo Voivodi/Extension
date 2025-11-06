@@ -1,10 +1,6 @@
-// src/extension.js
+
 const vscode = require('vscode');
 
-/**
- * Escape minimal MarkdownV2 wrapper outside fenced code.
- * Inside ` blocks content is verbatim, so only the header lines need safety.
- */
 function escapeMarkdownV2Inline(s) {
   return s.replace(/[\\_\*~`>#+\-=|{}.!]/g, match => `\\${match}`);
 }
@@ -18,7 +14,7 @@ async function sendToTelegram({ token, chatId, text, parseMode }) {
     disable_web_page_preview: true
   };
 
-  // Node 18+ has global fetch; VS Code uses Node >= 18 in the extension host.
+  
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -92,11 +88,11 @@ async function buildAndSendMessages(context) {
     ? (parseMode === 'MarkdownV2' ? `${escapeMarkdownV2Inline(headerLines.join('\n'))}\n\n` : headerLines.join('\n') + '\n\n')
     : '';
 
-  // Wrap in fenced code block. For MarkdownV2, backticks are allowed as fence. Content inside is verbatim.
+  
   const fenced = `\u0060\u0060\u0060${language || ''}\n${selectedText}\n\u0060\u0060\u0060`;
   const messageText = header + fenced;
 
-  // Split long messages safely below Telegram 4096 char limit.
+  
   const chunks = chunkString(messageText, Math.min(Math.max(chunkSize, 1000), 4000));
 
   const sending = vscode.window.withProgress(
@@ -105,7 +101,7 @@ async function buildAndSendMessages(context) {
       for (const [i, chunk] of chunks.entries()) {
         await sendToTelegram({ token, chatId, text: chunk, parseMode });
         if (chunks.length > 1) {
-          // slight delay to be nice to API
+          
           await new Promise(r => setTimeout(r, 150));
         }
       }
@@ -126,7 +122,7 @@ async function setBotToken(context) {
     ignoreFocusOut: true,
     password: true
   });
-  if (!token) return; // cancelled
+  if (!token) return; 
   await context.secrets.store('telegramPoster.botToken', token.trim());
   vscode.window.showInformationMessage('Telegram bot token saved securely.');
 }
