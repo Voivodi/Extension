@@ -1,0 +1,73 @@
+{
+  "name": "vscode-telegram-poster",
+  "displayName": "Telegram Poster",
+  "description": "Send selected code from VS Code to a Telegram chat or channel.",
+  "version": "0.1.0",
+  "publisher": "your-name",
+  "engines": {
+    "vscode": "^1.84.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": [
+    "onCommand:telegramPoster.sendSelection",
+    "onCommand:telegramPoster.setBotToken",
+    "onCommand:telegramPoster.clearBotToken"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "telegramPoster.sendSelection",
+        "title": "Telegram: Send Selection"
+      },
+      {
+        "command": "telegramPoster.setBotToken",
+        "title": "Telegram: Set Bot Token (secure)"
+      },
+      {
+        "command": "telegramPoster.clearBotToken",
+        "title": "Telegram: Clear Stored Bot Token"
+      }
+    ],
+    "configuration": {
+      "title": "Telegram Poster",
+      "properties": {
+        "telegramPoster.chatId": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Telegram chat ID (e.g., 1330472266) or channel username like @your_channel."
+        },
+        "telegramPoster.parseMode": {
+          "type": "string",
+          "enum": ["MarkdownV2", "HTML", "None"],
+          "default": "MarkdownV2",
+          "markdownDescription": "Parse mode for Telegram. MarkdownV2 recommended. Set to 'None' to send plain text."
+        },
+        "telegramPoster.prependFilename": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Prepend the file name above the code block."
+        },
+        "telegramPoster.includeMetadata": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Include small metadata line (language, timestamp)."
+        },
+        "telegramPoster.chunkSize": {
+          "type": "integer",
+          "default": 3500,
+          "minimum": 1000,
+          "maximum": 4000,
+          "markdownDescription": "Max characters per Telegram message chunk (Telegram hard-limit is 4096)."
+        }
+      }
+    }
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Voivodi/Extension"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+}
